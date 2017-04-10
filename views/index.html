@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html ng-app="angularApp">
+<head>
+    <title>Integrating AngularJS with NodeJS</title>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.2/angular.js"></script>
+    <script src="javascripts/app.js" type="text/javascript"></script>
+</head>
+<body >
+
+<p>Welcome to Recipe Finder</p>
+<p>Search for a recipe</p>
+
+<div ng-controller="searchController">
+    <p>
+        <select name="search_mode" ng-model="choice">
+            <option value="keyword" selected="selected">by Keyword</option>
+            <option value="category">by Category</option>
+            <option value="ingredient" >by Ingredients</option>
+        </select>
+    </p>
+    <input type="text" name="key" ng-model="key">
+    <button type="submit" ng-click="updateRes()">Submit</button>
+    <ul ng-repeat="item in data">
+        <li>Name: {{item.title}}</li>
+    </ul>
+</div>
+
+
+
+
+</body>
+</html>
