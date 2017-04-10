@@ -13,12 +13,12 @@
 <div ng-controller="searchController">
     <p>
         <select name="search_mode" ng-model="choice">
-            <option value="keyword" selected="selected">by Keyword</option>
+            <option value="keyword" ng-model="kk">by Keyword</option>
             <option value="category">by Category</option>
             <option value="ingredient" >by Ingredients</option>
         </select>
     </p>
-    <input type="text" name="key" ng-model="key">
+    <input type="text" name="key" ng-model="key" ng-if="kk">
     <button type="submit" ng-click="updateRes()">Submit</button>
     <ul ng-repeat="item in data">
         <li>Name: {{item.title}}</li>

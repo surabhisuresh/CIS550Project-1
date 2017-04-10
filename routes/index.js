@@ -5,7 +5,7 @@ var path = require('path');
 //Connect to MySQL
 var mysql = require('mysql')
 var connection = mysql.createConnection({
-    host     : 'xxxxxxxxxxxxxxxxxxx',
+    host     : 'dbcluster.cluster-cmscsvr5od93.us-east-1.rds.amazonaws.com',
     user     : 'group11',
     password : 'funkymonkey123*',
     database : 'recipe'
