@@ -32,6 +32,34 @@ router.get('/get_cat', function(req, res) {
     connection.query('SELECT distinct(category) from recipes' ,function (err, rows, fields) {
         if (err) throw err;
         res.json(rows);
+
+    });
+
+});
+
+router.get('/searchByCat/:cat', function(req, res) {
+    connection.query('SELECT title from recipes where category = "'+ req.params.cat+'"' ,function (err, rows, fields) {
+        if (err) throw err;
+        res.json(rows);
+    });
+
+});
+
+//SEARCH BY INGREDIENT
+router.get('/searchByIngr/:istr', function(req, res) {
+    var ingredients = req.params.istr.split('_');
+    var query = 'SELECT title from recipes where ingredients like "%'+ingredients[0]+'%"';
+    if (ingredients[1]!='')
+    {
+        query += ' AND ingredients like "%'+ingredients[1]+'%"';
+        if (ingredients[2]!='')
+        {
+            query += ' AND ingredients like "%'+ingredients[2]+'%"';
+        }
+    }
+    connection.query( query,function (err, rows, fields) {
+        if (err) throw err;
+        res.json(rows);
     });
 
 });
