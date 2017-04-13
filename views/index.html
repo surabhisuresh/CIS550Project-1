@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html ng-app="angularApp">
+<base href="/"/>
 <head>
     <title>Integrating AngularJS with NodeJS</title>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.2/angular.js"></script>
@@ -8,6 +9,10 @@
 <body >
 
 <p>Welcome to Recipe Finder</p>
+
+
+<a href="/signIn">Sign In</a>
+
 <p>Search for a recipe</p>
 
 <div ng-controller="searchController">
@@ -15,27 +20,32 @@
     </select>
     <br><br>
     <div ng-if="searchMode=='Keyword'" ng-controller="searchController">
-        <input type="text" name="key" ng-model="key">
+        <input type="text" name="key" ng-model="key"><br><br>
         <button type="submit" ng-click="updateResKey()">Submit</button>
-        <ul ng-repeat="item in data">
+        <ul ng-repeat="item in kdata">
             <li>Name: {{item.title}}</li>
         </ul>
     </div>
-    <div ng-if="searchMode=='Ingredient'">
+    <div ng-if="searchMode=='Ingredient'" ng-controller="searchController">
         <input type="text" name="ingr1" ng-model="ingr1">
         <input type="text" name="ingr2" ng-model="ingr2">
-        <input type="text" name="ingr3" ng-model="ingr3">
-        <button type="submit" ng-click="updateRes()">Submit</button>
-        <ul ng-repeat="item in data">
+        <input type="text" name="ingr3" ng-model="ingr3"><br><br>
+        <button type="submit" ng-click="updateResIngr()">Submit</button>
+        <ul ng-repeat="item in idata">
             <li>Name: {{item.title}}</li>
         </ul>
     </div>
-    <div ng-if="searchMode=='Category'" >
-        <select ng-model="catMode" ng-init="getCat()" ng-options="x.category for x in categories">
-        <button type="submit" ng-click="updateRes()">Submit</button>
-        <ul ng-repeat="item in data">
-            <li>Name: {{item.title}}</li>
-        </ul>
+    <div ng-if="searchMode=='Category'">
+        <select name="catMode" ng-model="catMode" ng-init="getCat()" ng-options="item.category for item in categories">
+        </select><br><br>
+        <div ng-controller="searchController">
+            <button type="submit" ng-click="updateResCat()">Submit</button>
+            <ul ng-repeat="item in cdata">
+                <li>Name: {{item.title}}</li>
+            </ul>
+        </div>
+
+
     </div>
 
 </div>
