@@ -4,7 +4,7 @@ app .config(function ($locationProvider){
     $locationProvider.html5Mode(true).hashPrefix('!');
 });
 
-app.controller('signInController', function($scope, $location, $http) {
+app.controller('signInController', function($scope, $location, $http, $window) {
 
     $scope.Authenticate = function() {
         var request = $http.get('/validate/'+$scope.user+'&'+$scope.password);
@@ -15,10 +15,17 @@ app.controller('signInController', function($scope, $location, $http) {
            if(data[0].role==1)
             {
 
-                $location.path("/admin");
+                //$location.path('/admin');
+                //$location.replace();
+                $window.location.href="/admin";
+
+
             }
             else
-                $location.path("/user");
+               $window.location.href="/user";
+
+
+
         });
         request.error(function (data) {
             console.log('Error: ' + data);
