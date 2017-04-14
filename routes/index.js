@@ -31,9 +31,9 @@ router.get('/signUp', function(req, res, next) {
 });
 
 //ADMIN Page
-router.get('/admin', function(req, res, next) {
+router.get('/admin_recipe', function(req, res, next) {
     //res.render('index', { title: 'Recipe Finder'});
-    res.sendFile(path.join(__dirname, '../', 'views', 'admin.html'));
+    res.sendFile(path.join(__dirname, '../', 'views', 'admin_recipe.html'));
 });
 
 //USER Page
@@ -48,6 +48,15 @@ router.get('/validate/:creden', function(req, res) {
     console.log("Inside index");
     var creds = req.params.creden.split('&');
     connection.query('SELECT role from User where Login="'+creds[0]+'" AND Password ="'+creds[1]+'" ' ,function (err, rows, fields) {
+        if (err) throw err;
+        res.json(rows);
+    });
+
+});
+
+router.get('/get_recipes', function(req, res) {
+    console.log("Inside recipes");
+    connection.query('SELECT * from recipes LIMIT 10' ,function (err, rows, fields) {
         if (err) throw err;
         res.json(rows);
     });

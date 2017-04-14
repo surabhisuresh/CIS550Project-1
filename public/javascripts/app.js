@@ -4,20 +4,30 @@ app .config(function ($locationProvider){
     $locationProvider.html5Mode(true).hashPrefix('!');
 });
 
+app.controller('AdminController',function($scope,$http,$interval){
+    $interval(function(){
+        load_pictures();
+    },300);
+    function load_pictures(){
+        $http.get('http://localhost:3000/get_recipes').success(function(data){
+            $scope.recipes=data;
+        });
+    };
+});
+
 app.controller('signInController', function($scope, $location, $http, $window) {
 
     $scope.Authenticate = function() {
         var request = $http.get('/validate/'+$scope.user+'&'+$scope.password);
         request.success(function (data) {
             console.log("Back again in signUp Controller");
-            //window.location("/admin");
             $scope.answer=data;
            if(data[0].role==1)
             {
 
                 //$location.path('/admin');
                 //$location.replace();
-                $window.location.href="/admin";
+                $window.location.href="/admin_recipe";
 
 
             }
@@ -35,6 +45,19 @@ app.controller('signInController', function($scope, $location, $http, $window) {
 
 app.controller('searchController', function($scope, $http) {
     $scope.modes = ["Keyword", "Category", "Ingredient"];
+
+
+    $scope.AllRecipes = function () {
+        console.log("Inside recipes-app");
+        var request = $http.get('/get_recipe');
+        request.success(function (data) {
+            $scope.recipes = data;
+        });
+        request.error(function (data) {
+            console.log('Error: ' + data);
+        });
+
+    }
 
     $scope.getCat = function() {
         $scope.categories = [];
