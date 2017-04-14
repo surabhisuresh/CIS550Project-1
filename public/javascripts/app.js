@@ -45,7 +45,7 @@ app.controller('signInController', function($scope, $location, $http, $window) {
 
 app.controller('searchController', function($scope, $http) {
     $scope.modes = ["Keyword", "Category", "Ingredient"];
-
+    
 
     $scope.AllRecipes = function () {
         console.log("Inside recipes-app");
@@ -58,6 +58,7 @@ app.controller('searchController', function($scope, $http) {
         });
 
     }
+
 
     $scope.getCat = function() {
         $scope.categories = [];
@@ -87,6 +88,7 @@ app.controller('searchController', function($scope, $http) {
         var request = $http.get('/searchByKey/' + $scope.key);
         request.success(function (data) {
             $scope.kdata = data;
+
         });
         request.error(function (data) {
             console.log('Error: ' + data);
@@ -103,6 +105,19 @@ app.controller('searchController', function($scope, $http) {
             console.log('Error: ' + data);
         });
     };
+
+
+    $scope.updateResIngr = function()  {
+        $scope.idata = [];
+        var request = $http.get('/searchByIngr/' + $scope.ingr1+'_'+$scope.ingr2+'_'+$scope.ingr3);
+        request.success(function (data) {
+            $scope.idata = data;
+        });
+        request.error(function (data) {
+            console.log('Error: ' + data);
+        });
+    };
+
 
 
 
