@@ -1,0 +1,52 @@
+doctype html
+html(ng-app='angularApp')
+    head
+        base(href='/')
+
+        title Admin Dashboard
+
+        script(src='http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.2/angular.js')
+
+        script(src='javascripts/app.js', type='text/javascript')
+    body
+        p List of All Recipes
+        div(ng-controller='AdminController')
+            table
+                thead
+                    tr
+                        th ID
+
+                        th Title
+
+                        th Category
+
+                        th Quantity
+
+                        th Unit
+
+                        th Ingredient
+
+                        th Procedure
+
+                        th Login
+
+                tbody
+                    tr(ng-repeat='x in recipes')
+                        td {{ x.ID }}
+
+                        td {{ x.Title }}
+
+                        td {{ x.Category }}
+
+                        td {{ x.Qty }}
+
+                        td {{ x.Unit }}
+
+                        td {{ x.Ingredient }}
+
+                        td {{ x.Procedure }}
+
+                        td {{ x.Login }}
+
+
+

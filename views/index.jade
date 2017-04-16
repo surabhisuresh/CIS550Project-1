@@ -1,5 +1,40 @@
-extends layout
+doctype html
+html(ng-app='angularApp')
+  head
+    title Recipe Finder
 
-block content
-  h1= title
-  p Welcome to #{title}
+    script(src='http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.2/angular.js')
+
+    script(src='javascripts/app.js', type='text/javascript')
+  body
+    p Welcome to Recipe Finder
+    a(href='/signIn') Sign In
+    p Search for a recipe
+    div(ng-controller='searchController')
+      select(ng-model='searchMode', ng-options='x for x in modes', ng-controller='searchController')
+      br
+      div(ng-if="searchMode=='Category'" )
+        select(name='catMode', ng-model='catMode', ng-options='item.Category for item in categories')
+        br
+        br
+        button(type='submit', ng-click='updateResCat()') Submit
+        ul(ng-repeat='item in cdata')
+          li
+            a(ng-href='viewRecipe/{{item.ID}}') {{item.Title}}
+
+      div(ng-if="searchMode=='Ingredient'", ng-controller='viewController')
+        input(type='text', name='ingr1', ng-model='ingr1')
+
+        input(type='text', name='ingr2', ng-model='ingr2')
+
+        input(type='text', name='ingr3', ng-model='ingr3')
+        br
+        br
+        div(ng-controller='searchController')
+          button(type='submit', ng-click='updateResIngr()') Submit
+
+        ul(ng-repeat='item in idata')
+          li
+          a(ng-href='viewRecipe/{{item.ID}}') {{item.Title}}
+
+

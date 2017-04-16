@@ -2,7 +2,7 @@
 <html ng-app="angularApp">
 <base href="/"/>
 <head>
-    <title>Integrating AngularJS with NodeJS</title>
+    <title>Recipe Finder</title>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.2/angular.js"></script>
     <script src="javascripts/app.js" type="text/javascript"></script>
 </head>
@@ -23,7 +23,7 @@
         <input type="text" name="key" ng-model="key"><br><br>
         <button type="submit" ng-click="updateResKey()">Submit</button>
         <ul ng-repeat="item in kdata">
-            <li>Name: {{item.title}}</li>
+            <li><a ng-href="/viewRecipe/{{item.ID}}" >{{item.Title}}</a> </li>
         </ul>
     </div>
     <div ng-if="searchMode=='Ingredient'" ng-controller="searchController">
@@ -32,16 +32,16 @@
         <input type="text" name="ingr3" ng-model="ingr3"><br><br>
         <button type="submit" ng-click="updateResIngr()">Submit</button>
         <ul ng-repeat="item in idata">
-            <li>Name: {{item.title}}</li>
+            <li><a ng-href="/viewRecipe/{{item.ID}}" >{{item.Title}}</a> </li>
         </ul>
     </div>
     <div ng-if="searchMode=='Category'">
-        <select name="catMode" ng-model="catMode" ng-init="getCat()" ng-options="item.category for item in categories">
+        <select name="catMode" ng-model="catMode" ng-init="getCat()" ng-options="item.Category for item in categories">
         </select><br><br>
         <div ng-controller="searchController">
             <button type="submit" ng-click="updateResCat()">Submit</button>
             <ul ng-repeat="item in cdata">
-                <li>Name: {{item.title}}</li>
+                <li><a ng-href="/viewRecipe/{{item.ID}}" >{{item.Title}}</a> </li>
             </ul>
         </div>
 

@@ -1,0 +1,14 @@
+doctype html
+html(ng-app='angularApp')
+    head
+        title Recipe Finder
+
+        script(src='http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.2/angular.js')
+
+        script(src='javascripts/app.js', type='text/javascript')
+    body
+        p #{results[0].Title} | #{results[0].Category}
+        - for (var inx = 0; inx < results.length; inx++)
+            p #{results[inx].Qty} #{results[inx].Unit} of #{results[inx].Ingredient}
+        p #{results[0].Procedure}
+

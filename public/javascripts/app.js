@@ -5,9 +5,8 @@ app .config(function ($locationProvider){
 });
 
 app.controller('AdminController',function($scope,$http,$interval){
-    $interval(function(){
-        load_pictures();
-    },300);
+    load_pictures();
+
     function load_pictures(){
         $http.get('http://localhost:3000/get_recipes').success(function(data){
             $scope.recipes=data;
@@ -22,7 +21,7 @@ app.controller('signInController', function($scope, $location, $http, $window) {
         request.success(function (data) {
             console.log("Back again in signUp Controller");
             $scope.answer=data;
-           if(data[0].role==1)
+           if(data[0].IsAdmin==1)
             {
 
                 //$location.path('/admin');
@@ -45,7 +44,7 @@ app.controller('signInController', function($scope, $location, $http, $window) {
 
 app.controller('searchController', function($scope, $http) {
     $scope.modes = ["Keyword", "Category", "Ingredient"];
-    
+
 
     $scope.AllRecipes = function () {
         console.log("Inside recipes-app");
@@ -57,10 +56,9 @@ app.controller('searchController', function($scope, $http) {
             console.log('Error: ' + data);
         });
 
-    }
+    };
 
-
-    $scope.getCat = function() {
+    $scope.getCat = function()  {
         $scope.categories = [];
         var request = $http.get('/get_cat');
         request.success(function (data) {
@@ -73,7 +71,7 @@ app.controller('searchController', function($scope, $http) {
 
     $scope.updateResCat = function()  {
         $scope.cdata = [];
-        var c = $scope.catMode['category'];
+        var c = $scope.catMode['Category'];
         var request = $http.get('/searchByCat/'+c);
         request.success(function (data) {
             $scope.cdata = data;
@@ -97,7 +95,7 @@ app.controller('searchController', function($scope, $http) {
 
     $scope.updateResIngr = function()  {
         $scope.idata = [];
-        var request = $http.get('/searchByIngr/' + $scope.ingr1+'_'+$scope.ingr2+'_'+$scope.ingr3);
+        var request = $http.get('/searchByIngr/' + $scope.ingr1+'&'+$scope.ingr2+'&'+$scope.ingr3);
         request.success(function (data) {
             $scope.idata = data;
         });
@@ -105,20 +103,6 @@ app.controller('searchController', function($scope, $http) {
             console.log('Error: ' + data);
         });
     };
-
-
-    $scope.updateResIngr = function()  {
-        $scope.idata = [];
-        var request = $http.get('/searchByIngr/' + $scope.ingr1+'_'+$scope.ingr2+'_'+$scope.ingr3);
-        request.success(function (data) {
-            $scope.idata = data;
-        });
-        request.error(function (data) {
-            console.log('Error: ' + data);
-        });
-    };
-
-
 
 
 });

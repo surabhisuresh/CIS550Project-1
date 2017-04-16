@@ -1,0 +1,21 @@
+doctype html
+html(ng-app='angularApp')
+    head
+        base(href='/')
+
+        title Integrating AngularJS with NodeJS
+
+        script(src='http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.2/angular.js')
+
+        script(src='javascripts/app.js', type='text/javascript')
+    body
+        p Welcome to Recipe Finder
+        p Sign In!
+        div(ng-controller='signInController')
+            form
+            input(type='text', ng-model='user', value='USERNAME')
+            input(type='password', ng-model='password', value = 'PASSWORD')
+            input(type='submit', value='SignIn', ng-click='Authenticate()')
+            {{answer}}
+    p Don't have an account yet? Sign up below!
+a(href='/signUp') Sign Up
