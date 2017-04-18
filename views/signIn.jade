@@ -12,10 +12,10 @@ html(ng-app='angularApp')
         p Welcome to Recipe Finder
         p Sign In!
         div(ng-controller='signInController')
-            form
-            input(type='text', ng-model='user', value='USERNAME')
-            input(type='password', ng-model='password', value = 'PASSWORD')
+            label Username
+            input(type='text', name="user" ng-model='user', value='USERNAME')
+            label Password
+            input(type='password', name="pass", ng-model='password', value = 'PASSWORD')
             input(type='submit', value='SignIn', ng-click='Authenticate()')
-            {{answer}}
     p Don't have an account yet? Sign up below!
-a(href='/signUp') Sign Up
+    a(href='/signUp') Sign Up

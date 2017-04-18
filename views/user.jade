@@ -1,7 +1,44 @@
 doctype html
-html(lang='en')
+html(ng-app='angularApp')
+    base(href='/')
     head
-        meta(charset='UTF-8')
-
-        title Title
+        title Recipe Finder
+        script(src='http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.2/angular.js')
+        script(src='javascripts/app.js', type='text/javascript')
     body
+        p Welcome to Recipe Finder #{login}
+        a(href='/myAccount/#{login}') MY ACCOUNT
+        p Search for a recipe
+        div(ng-controller='searchController')
+            select(ng-model='searchMode', ng-options='x for x in modes')
+            br
+            br
+            div(ng-if="searchMode=='Keyword'", ng-controller='searchController')
+                input(type='text', name='key', ng-model='key')
+                br
+                br
+                button(type='submit', ng-click='updateResKey()') Submit
+                p {{emptymsg}}
+                ul(ng-repeat='item in kdata')
+                    li
+                        a(ng-href='/viewRecipeUser/{{item.ID}}&#{login}') {{item.Title}}
+            div(ng-if="searchMode=='Ingredient'", ng-controller='searchController')
+                input(type='text', name='ingr1', ng-model='ingr1')
+                input(type='text', name='ingr2', ng-model='ingr2')
+                input(type='text', name='ingr3', ng-model='ingr3')
+                br
+                br
+                button(type='submit', ng-click='updateResIngr()') Submit
+                p {{emptymsg}}
+                ul(ng-repeat='item in idata')
+                    li
+                        a(ng-href='/viewRecipeUser/{{item.ID}}&#{login}') {{item.Title}}
+            div(ng-if="searchMode=='Category'")
+                select(name='catMode', ng-model='catMode', ng-init='getCat()', ng-options='item.Category for item in categories')
+                br
+                br
+                div(ng-controller='searchController')
+                    button(type='submit', ng-click='updateResCat()') Submit
+                    ul(ng-repeat='item in cdata')
+                        li
+                            a(ng-href='/viewRecipeUser/{{item.ID}}&#{login}') {{item.Title}}

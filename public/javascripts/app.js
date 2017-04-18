@@ -8,7 +8,7 @@ app.controller('AdminController',function($scope,$http,$interval){
     load_pictures();
 
     function load_pictures(){
-        $http.get('http://localhost:3000/get_recipes').success(function(data){
+        $http.get('/get_recipes').success(function(data){
             $scope.recipes=data;
         });
     };
@@ -31,7 +31,7 @@ app.controller('signInController', function($scope, $location, $http, $window) {
 
             }
             else
-               $window.location.href="/user";
+               $window.location.href="/user/"+$scope.user;
 
 
 
@@ -85,7 +85,15 @@ app.controller('searchController', function($scope, $http) {
         $scope.kdata = [];
         var request = $http.get('/searchByKey/' + $scope.key);
         request.success(function (data) {
-            $scope.kdata = data;
+            if (!data['emptymsg'])
+            {
+                $scope.kdata = data;
+            }
+            else
+            {
+                $scope.emptymsg = data['emptymsg']
+            }
+
 
         });
         request.error(function (data) {
@@ -97,12 +105,43 @@ app.controller('searchController', function($scope, $http) {
         $scope.idata = [];
         var request = $http.get('/searchByIngr/' + $scope.ingr1+'&'+$scope.ingr2+'&'+$scope.ingr3);
         request.success(function (data) {
-            $scope.idata = data;
+            if (!data['emptymsg'])
+            {
+                $scope.idata = data;
+            }
+            else
+            {
+                $scope.emptymsg = data['emptymsg']
+            }
         });
         request.error(function (data) {
             console.log('Error: ' + data);
         });
     };
 
+});
 
+app.controller('addController', function($scope, $http) {
+    $scope.getCat = function()  {
+        $scope.categories = [];
+        var request = $http.get('/get_cat');
+        request.success(function (data) {
+            $scope.categories = data;
+        });
+        request.error(function (data) {
+            console.log('Error: ' + data);
+        });
+    };
+
+    $scope.ingredients = [{qty:'q1', unit:'u1',ig: 'i1'}, {qty:'q2', unit:'u2',ig: 'i2'}];
+
+    $scope.addNewIngr = function() {
+        var newItemNo = $scope.ingredients.length+1;
+        $scope.ingredients.push({'qty':'q'+newItemNo, 'unit':'u'+newItemNo, 'ig':'i'+newItemNo });
+    };
+
+    $scope.removeIngr = function() {
+        var lastItem = $scope.ingredients.length-1;
+        $scope.ingredients.splice(lastItem);
+    };
 });

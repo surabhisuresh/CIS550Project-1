@@ -1,0 +1,27 @@
+doctype html
+html(ng-app='angularApp')
+    base(href='/')
+    head
+        title Recipe Finder
+        script(src='http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.2/angular.js')
+        script(src='javascripts/app.js', type='text/javascript')
+    body
+        p New Recipe
+        form(ng-controller='addController')
+            .input
+                label Title
+                input(name='title', ng-model='title', type='text')
+            .input
+                label Category
+                select(name='catMode', ng-model='catMode', ng-init='getCat()', ng-options='item.Category for item in categories')
+            .input
+                label Ingredients
+                p(data-ng-repeat='i in ingredients')
+                    input(type='text', ng-model='i.name', name='', placeholder='Quantity')
+                    input(type='text', ng-model='i.name', name='', placeholder='Unit')
+                    input(type='text', ng-model='i.name', name='', placeholder='Ingredient')
+                    button.remove(ng-show='$last', ng-click='removeIngr()') Remove
+                button.addfields(ng-click='addNewIngr()') Add Ingredient
+            .input
+                label Procedure
+                input(name='procedure', ng-model='procedure', type='text')

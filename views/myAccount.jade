@@ -1,0 +1,25 @@
+doctype html
+html(ng-app='angularApp')
+    head
+        title Recipe Finder
+
+    body
+        p My Recipes
+        ul
+        - for (var inx = 0; inx < results1.length; inx++)
+            li
+             a(href='/viewRecipeUser/#{results1[inx].ID}&#{login}') #{results1[inx].Title} | #{results1[inx].Category}
+             &nbsp;&nbsp;
+             input(type="button" ,onclick="location.href='/newRecipe/#{login}'" ,value="Edit")
+             br
+             br
+        input(type="button", onclick="location.href='/newRecipe/#{login}'", value="Add Recipe")
+        br
+        br
+        p My Favorites
+        ul
+        - for (var inx = 0; inx < results2.length; inx++)
+            li
+             a(href='/viewRecipeUser/#{results2[inx].ID}&#{login}') #{results2[inx].Title} | #{results2[inx].Category}
+             br
+             br

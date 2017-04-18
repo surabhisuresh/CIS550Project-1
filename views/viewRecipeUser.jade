@@ -1,0 +1,46 @@
+doctype html
+html
+    head
+        title Recipe Finder
+    body
+        p #{results[0].Title} | #{results[0].Category}
+        - if (avgrate[0].Rate == null)
+            p AVERAGE RATING: 0/5
+        - else
+            p AVERAGE RATING: #{avgrate[0].Rate}/5
+        - for (var inx = 0; inx < results.length; inx++)
+            p #{results[inx].Qty} #{results[inx].Unit} of #{results[inx].Ingredient}
+        p #{results[0].Procedure}
+
+        - if (fav.length == 0)
+            input(type="button" ,onclick="location.href='/addFav/#{results[0].ID}&#{login}'", value="Favorite?")
+        - if (fav.length != 0)
+            input(type="button" ,onclick="location.href='/delFav/#{results[0].ID}&#{login}'", value="Un-Favorite?")
+        br
+        br
+        - if (rate.length==0)
+           form(action='/addRate/#{results[0].ID}&#{login}', method='post')
+            input(type="radio", name="rating", value="1")
+            | 1
+            input(type="radio", name="rating", value="2")
+            | 2
+            input(type="radio", name="rating", value="3")
+            | 3
+            input(type="radio", name="rating", value="4")
+            | 4
+            input(type="radio", name="rating", value="5")
+            | 5
+            button(type='submit') Submit Rating
+        - else
+            form(action='/updateRate/#{results[0].ID}&#{login}', method='post')
+                input(type="radio", name="rating", value="1")
+                | 1
+                input(type="radio", name="rating", value="2")
+                | 2
+                input(type="radio", name="rating", value="3")
+                | 3
+                input(type="radio", name="rating", value="4")
+                | 4
+                input(type="radio", name="rating", value="5")
+                | 5
+                button(type='submit') Change Rating from #{rate[0].Rate}

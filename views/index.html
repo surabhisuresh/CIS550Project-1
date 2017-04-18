@@ -22,6 +22,7 @@
     <div ng-if="searchMode=='Keyword'" ng-controller="searchController">
         <input type="text" name="key" ng-model="key"><br><br>
         <button type="submit" ng-click="updateResKey()">Submit</button>
+        <p>{{emptymsg}}</p>
         <ul ng-repeat="item in kdata">
             <li><a ng-href="/viewRecipe/{{item.ID}}" >{{item.Title}}</a> </li>
         </ul>
@@ -30,6 +31,7 @@
         <input type="text" name="ingr1" ng-model="ingr1">
         <input type="text" name="ingr2" ng-model="ingr2">
         <input type="text" name="ingr3" ng-model="ingr3"><br><br>
+        <p>{{emptymsg}}</p>
         <button type="submit" ng-click="updateResIngr()">Submit</button>
         <ul ng-repeat="item in idata">
             <li><a ng-href="/viewRecipe/{{item.ID}}" >{{item.Title}}</a> </li>

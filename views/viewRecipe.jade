@@ -1,14 +1,17 @@
 doctype html
-html(ng-app='angularApp')
+html
     head
         title Recipe Finder
-
-        script(src='http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.2/angular.js')
-
-        script(src='javascripts/app.js', type='text/javascript')
     body
         p #{results[0].Title} | #{results[0].Category}
+        - if (avgrate[0].Rate == null)
+            p AVERAGE RATING: 0/5
+        - else
+            p AVERAGE RATING: #{avgrate[0].Rate}/5
         - for (var inx = 0; inx < results.length; inx++)
             p #{results[inx].Qty} #{results[inx].Unit} of #{results[inx].Ingredient}
         p #{results[0].Procedure}
-
+        br
+        br
+        p Don't have an account yet? Sign up below!
+        a(href='/signUp') Sign Up

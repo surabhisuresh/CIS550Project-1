@@ -1,10 +1,59 @@
 <!DOCTYPE html>
-<html lang="en">
+<html ng-app="angularApp">
+<base href="/"/>
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Recipe Finder</title>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.2/angular.js"></script>
+    <script src="javascripts/app.js" type="text/javascript"></script>
 </head>
-<body>
+<body >
+
+<p>Welcome to Recipe Finder</p>
+
+<div ng-controller="userController">
+    <a href="/myAccount/uuLogin">MY ACCOUNT</a>
+</div>
+
+
+<p>Search for a recipe</p>
+
+<div ng-controller="searchController">
+    <select ng-model="searchMode" ng-options="x for x in modes">
+    </select>
+    <br><br>
+    <div ng-if="searchMode=='Keyword'" ng-controller="searchController">
+        <input type="text" name="key" ng-model="key"><br><br>
+        <button type="submit" ng-click="updateResKey()">Submit</button>
+        <ul ng-repeat="item in kdata">
+            <li><a ng-href="/viewRecipe/{{item.ID}}" >{{item.Title}}</a> </li>
+        </ul>
+    </div>
+    <div ng-if="searchMode=='Ingredient'" ng-controller="searchController">
+        <input type="text" name="ingr1" ng-model="ingr1">
+        <input type="text" name="ingr2" ng-model="ingr2">
+        <input type="text" name="ingr3" ng-model="ingr3"><br><br>
+        <button type="submit" ng-click="updateResIngr()">Submit</button>
+        <ul ng-repeat="item in idata">
+            <li><a ng-href="/viewRecipe/{{item.ID}}" >{{item.Title}}</a> </li>
+        </ul>
+    </div>
+    <div ng-if="searchMode=='Category'">
+        <select name="catMode" ng-model="catMode" ng-init="getCat()" ng-options="item.Category for item in categories">
+        </select><br><br>
+        <div ng-controller="searchController">
+            <button type="submit" ng-click="updateResCat()">Submit</button>
+            <ul ng-repeat="item in cdata">
+                <li><a ng-href="/viewRecipe/{{item.ID}}" >{{item.Title}}</a> </li>
+            </ul>
+        </div>
+
+
+    </div>
+
+</div>
+
+
+
 
 </body>
 </html>

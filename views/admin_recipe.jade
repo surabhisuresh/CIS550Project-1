@@ -20,31 +20,16 @@ html(ng-app='angularApp')
 
                         th Category
 
-                        th Quantity
-
-                        th Unit
-
-                        th Ingredient
-
-                        th Procedure
-
                         th Login
 
                 tbody
                     tr(ng-repeat='x in recipes')
                         td {{ x.ID }}
 
-                        td {{ x.Title }}
+                        td
+                            a(ng-href='/viewRecipe/{{x.ID}}') {{x.Title}}
 
                         td {{ x.Category }}
-
-                        td {{ x.Qty }}
-
-                        td {{ x.Unit }}
-
-                        td {{ x.Ingredient }}
-
-                        td {{ x.Procedure }}
 
                         td {{ x.Login }}
 
