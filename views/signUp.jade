@@ -1,9 +1,25 @@
 doctype html
-html(lang='en')
+html(ng-app='angularApp')
     head
         base(href='/')
 
-        meta(charset='UTF-8')
+        title Recipe Finder - Sign Up
 
-        title Sign Up
+        script(src='http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.2/angular.js')
+
+        script(src='javascripts/app.js', type='text/javascript')
     body
+        p Welcome to Recipe Finder
+        p Sign Up
+        div(ng-controller='signUpController')
+            label Name
+            input(type='text', name="username" ng-model='username', value='NAME')
+            label Login Name
+            input(type='text', value='LOGIN', ng-model='login')
+            label Password
+            input(type='text', name="pass", ng-model='password', value = 'PASSWORD')
+            label Email
+            input(type='text', value='email', ng-model='email', name="email")
+            input(type='submit' value='signUp' ng-click='AddUser()')
+    p Don't have an account yet? Sign up below!
+    input(type="button", onclick="location.href='/signUp'", value="Sign Up")

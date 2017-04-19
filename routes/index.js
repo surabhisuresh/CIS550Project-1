@@ -53,6 +53,19 @@ router.get('/validate/:creden', function(req, res) {
 
 });
 
+//Insert User
+router.get('/insertUser/:values', function(req, res) {
+    console.log("Inside index");
+    var value = req.params.values.split('&');
+    console.log('INSERT INTO Users(Name, Login, Password, Email) VALUES('+value[0]+','+value[1]+','+value[2]+','+value[3]+')');
+    connection.query('INSERT INTO Users(Name, Login, Password, Email) VALUES("'+value[0]+'","'+value[1]+'","'+value[2]+'","'+value[3]+'")' ,function (err, rows, fields) {
+        if (err) throw err;
+        res.redirect('/signIn');
+
+    });
+
+});
+
 //ADMIN FN (See all recipes)
 router.get('/get_recipes', function(req, res) {
     console.log("Inside recipes");

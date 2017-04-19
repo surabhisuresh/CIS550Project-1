@@ -27,14 +27,22 @@ app.controller('signInController', function($scope, $location, $http, $window) {
                 //$location.path('/admin');
                 //$location.replace();
                 $window.location.href="/admin_recipe";
-
-
             }
             else
                $window.location.href="/user/"+$scope.user;
+        });
+        request.error(function (data) {
+            console.log('Error: ' + data);
+        });
+    };
+});
 
+app.controller('signUpController', function($scope, $location, $http, $window) {
 
-
+    $scope.AddUser = function() {
+        var request = $http.get('/insertUser/'+$scope.username+'&'+$scope.password+'&'+$scope.login+'&'+$scope.email);
+        request.success(function (data) {
+            $window.location.href="/signIn";
         });
         request.error(function (data) {
             console.log('Error: ' + data);

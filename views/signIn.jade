@@ -18,4 +18,4 @@ html(ng-app='angularApp')
             input(type='password', name="pass", ng-model='password', value = 'PASSWORD')
             input(type='submit', value='SignIn', ng-click='Authenticate()')
     p Don't have an account yet? Sign up below!
-    a(href='/signUp') Sign Up
+    input(type="button", onclick="location.href='/signUp'", value="Sign Up")
