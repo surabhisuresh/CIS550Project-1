@@ -3,6 +3,7 @@ html
     head
         title Recipe Finder
     body
+        input(type="button", onclick="location.href='/'", value="Logout")
         p #{results[0].Title} | #{results[0].Category}
         - if (avgrate[0].Rate == null)
             p AVERAGE RATING: 0/5
@@ -44,3 +45,4 @@ html
                 input(type="radio", name="rating", value="5")
                 | 5
                 button(type='submit') Change Rating from #{rate[0].Rate}
+        a(href="/user/#{login}") Go Back

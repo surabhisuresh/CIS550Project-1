@@ -7,6 +7,8 @@ html(ng-app='angularApp')
         script(src='javascripts/app.js', type='text/javascript')
     body
         p Welcome to Recipe Finder #{login}
+        input(type="button", onclick="location.href='/'", value="Logout")
+        br
         a(href='/myAccount/#{login}') MY ACCOUNT
         p Search for a recipe
         div(ng-controller='searchController')
@@ -19,9 +21,15 @@ html(ng-app='angularApp')
                 br
                 button(type='submit', ng-click='updateResKey()') Submit
                 p {{emptymsg}}
-                ul(ng-repeat='item in kdata')
-                    li
+                select(name='ordering', ng-model='ordering')
+                    option(value='') ---Sort By---
+                    option(value='arate') Highest Avg Rating
+                    option(value='numrate') Most Rated
+                    option(value='numfav') Most Favorited
+                ul
+                    li(ng-repeat='item in kdata | orderBy:ordering:true')
                         a(ng-href='/viewRecipeUser/{{item.ID}}&#{login}') {{item.Title}}
+                        |  Rating:{{item.arate}}/5
             div(ng-if="searchMode=='Ingredient'", ng-controller='searchController')
                 input(type='text', name='ingr1', ng-model='ingr1')
                 input(type='text', name='ingr2', ng-model='ingr2')
@@ -30,15 +38,27 @@ html(ng-app='angularApp')
                 br
                 button(type='submit', ng-click='updateResIngr()') Submit
                 p {{emptymsg}}
-                ul(ng-repeat='item in idata')
-                    li
+                select(name='ordering', ng-model='ordering')
+                    option(value='') ---Sort By---
+                    option(value='arate') Highest Avg Rating
+                    option(value='numrate') Most Rated
+                    option(value='numfav') Most Favorited
+                ul
+                    li(ng-repeat='item in idata | orderBy:ordering:true')
                         a(ng-href='/viewRecipeUser/{{item.ID}}&#{login}') {{item.Title}}
+                        |  Rating:{{item.arate}}/5
             div(ng-if="searchMode=='Category'")
                 select(name='catMode', ng-model='catMode', ng-init='getCat()', ng-options='item.Category for item in categories')
                 br
                 br
                 div(ng-controller='searchController')
                     button(type='submit', ng-click='updateResCat()') Submit
-                    ul(ng-repeat='item in cdata')
-                        li
+                    select(name='ordering', ng-model='ordering')
+                        option(value='') ---Sort By---
+                        option(value='arate') Highest Avg Rating
+                        option(value='numrate') Most Rated
+                        option(value='numfav') Most Favorited
+                    ul
+                        li(ng-repeat='item in cdata | orderBy:ordering:true')
                             a(ng-href='/viewRecipeUser/{{item.ID}}&#{login}') {{item.Title}}
+                            |  Rating:{{item.arate}}/5

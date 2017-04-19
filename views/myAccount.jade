@@ -4,6 +4,7 @@ html(ng-app='angularApp')
         title Recipe Finder
 
     body
+        input(type="button", onclick="location.href='/'", value="Logout")
         p My Recipes
         ul
         - for (var inx = 0; inx < results1.length; inx++)
@@ -23,3 +24,4 @@ html(ng-app='angularApp')
              a(href='/viewRecipeUser/#{results2[inx].ID}&#{login}') #{results2[inx].Title} | #{results2[inx].Category}
              br
              br
+        a(href="/") Search for Recipes?

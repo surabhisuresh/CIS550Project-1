@@ -9,6 +9,7 @@ html(ng-app='angularApp')
 
         script(src='javascripts/app.js', type='text/javascript')
     body
+        input(type="button", onclick="location.href='/'", value="Logout")
         p List of All Recipes
         div(ng-controller='AdminController')
             table
@@ -22,6 +23,8 @@ html(ng-app='angularApp')
 
                         th Login
 
+                        th Delete
+
                 tbody
                     tr(ng-repeat='x in recipes')
                         td {{ x.ID }}
@@ -32,6 +35,9 @@ html(ng-app='angularApp')
                         td {{ x.Category }}
 
                         td {{ x.Login }}
+
+                        td
+                            a(ng-href='/delRecipe/{{x.ID}}') Delete
 
 
 

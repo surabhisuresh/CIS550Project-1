@@ -53,6 +53,7 @@ router.get('/validate/:creden', function(req, res) {
 
 });
 
+//ADMIN FN (See all recipes)
 router.get('/get_recipes', function(req, res) {
     console.log("Inside recipes");
     connection.query('SELECT * from Recipes' ,function (err, rows, fields) {
@@ -62,18 +63,19 @@ router.get('/get_recipes', function(req, res) {
 
 });
 
+////ADMIN FN (Delete recipe)
+router.get('/delRecipe/:id', function(req, res) {
+    connection.query('delete from Recipes where ID= '+req.params.id ,function (err, rows, fields) {
+        if (err) throw err;
+    });
+    res.redirect('/admin_recipe');
+});
+
 //SEARCH BY KEYWORD
 router.get('/searchByKey/:key', function(req, res) {
-    connection.query('SELECT ID,Title from Recipes where Title like "%'+req.params.key+'%"' ,function (err, rows, fields) {
+    connection.query('SELECT R1.ID,R1.Title, IFNULL(avg(R2.Rate), 0) as arate,count(R2.Rate) as numrate, count(F.Login) as numfav from Recipes R1 left join Rates R2 on R1.ID=R2.ID left join Favorites F on F.ID=R1.ID where R1.Title like "%'+req.params.key+'%" group by R1.ID' ,function (err, rows, fields) {
         if (err) throw err;
-        if (rows.length == 0)
-        {
-            res.json({emptymsg: 'Sorry! There are no matches.'})
-        }
-        else
-        {
-            res.json(rows);
-        }
+        res.json(rows);
 
     });
 
@@ -90,7 +92,7 @@ router.get('/get_cat', function(req, res) {
 });
 
 router.get('/searchByCat/:cat', function(req, res) {
-    connection.query('SELECT ID,Title from Recipes where Category = "'+ req.params.cat+'"' ,function (err, rows, fields) {
+    connection.query('SELECT R1.ID,R1.Title, IFNULL(avg(R2.Rate), 0) as arate,count(R2.Rate) as numrate, count(F.Login) as numfav from Recipes R1 left join Rates R2 on R1.ID=R2.ID left join Favorites F on F.ID=R1.ID where R1.Category ="'+req.params.cat+'" group by R1.ID' ,function (err, rows, fields) {
         if (err) throw err;
         res.json(rows);
     });
@@ -100,25 +102,19 @@ router.get('/searchByCat/:cat', function(req, res) {
 //SEARCH BY INGREDIENT
 router.get('/searchByIngr/:istr', function(req, res) {
     var ingredients = req.params.istr.split('&');
-    var query = 'SELECT distinct(r.ID), r.Title from Recipes r join HasIngr h on h.ID = r.ID where exists( select 1 from HasIngr h2 where h2.Ingredient like "%'+ingredients[0]+'%" and h2.ID=r.ID) ';
-    if (ingredients[1]!='')
+    var query = 'SELECT distinct(r.ID) from Recipes r join HasIngr h on h.ID = r.ID where exists( select 1 from HasIngr h2 where h2.Ingredient like "%'+ingredients[0]+'%" and h2.ID=r.ID) ';
+    if (ingredients[1]!='undefined')
     {
         query += ' and exists( select 1 from HasIngr h2 where h2.Ingredient like "%'+ingredients[1]+'%" and h2.ID=r.ID) ';
-        if (ingredients[2]!='')
+        if (ingredients[2]!='undefined')
         {
             query += ' and exists( select 1 from HasIngr h2 where h2.Ingredient like "%'+ingredients[2]+'%" and h2.ID=r.ID) ';
         }
     }
-    connection.query( query,function (err, rows, fields) {
+    query2 = 'select R1.ID,R1.Title, IFNULL(avg(R2.Rate), 0) as arate,count(R2.Rate) as numrate, count(F.Login) as numfav from Recipes R1 left join Rates R2 on R1.ID=R2.ID left join Favorites F on F.ID=R1.ID where R1.ID IN ('+query+') group by R1.ID' ;
+    connection.query( query2,function (err, rows, fields) {
         if (err) throw err;
-        if (rows.length == 0)
-        {
-            res.json({emptymsg: 'Sorry! There are no matches.'})
-        }
-        else
-        {
-            res.json(rows);
-        }
+        res.json(rows);
     });
 
 });

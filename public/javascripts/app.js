@@ -85,13 +85,14 @@ app.controller('searchController', function($scope, $http) {
         $scope.kdata = [];
         var request = $http.get('/searchByKey/' + $scope.key);
         request.success(function (data) {
-            if (!data['emptymsg'])
+            if (data.length!=0)
             {
                 $scope.kdata = data;
+                $scope.emptymsg = '';
             }
             else
             {
-                $scope.emptymsg = data['emptymsg']
+                $scope.emptymsg = 'Sorry! There are no matches.';
             }
 
 
@@ -105,13 +106,14 @@ app.controller('searchController', function($scope, $http) {
         $scope.idata = [];
         var request = $http.get('/searchByIngr/' + $scope.ingr1+'&'+$scope.ingr2+'&'+$scope.ingr3);
         request.success(function (data) {
-            if (!data['emptymsg'])
+            if (data.length!=0)
             {
                 $scope.idata = data;
+                $scope.emptymsg = '';
             }
             else
             {
-                $scope.emptymsg = data['emptymsg']
+                $scope.emptymsg = 'Sorry! There are no matches.';
             }
         });
         request.error(function (data) {

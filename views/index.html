@@ -23,27 +23,45 @@
         <input type="text" name="key" ng-model="key"><br><br>
         <button type="submit" ng-click="updateResKey()">Submit</button>
         <p>{{emptymsg}}</p>
-        <ul ng-repeat="item in kdata">
-            <li><a ng-href="/viewRecipe/{{item.ID}}" >{{item.Title}}</a> </li>
+        <select name="ordering" id="ordering" ng-model="ordering">
+            <option value="">---Sort By---</option>
+            <option value="arate">Highest Avg Rating</option>
+            <option value="numrate">Most Rated</option>
+            <option value="numfav">Most Favorited</option>
+        </select>
+        <ul>
+            <li ng-repeat="item in kdata | orderBy:ordering:true"><a ng-href="/viewRecipe/{{item.ID}}" >{{item.Title}}</a> Rating:{{item.arate}}/5 </li>
         </ul>
     </div>
     <div ng-if="searchMode=='Ingredient'" ng-controller="searchController">
         <input type="text" name="ingr1" ng-model="ingr1">
         <input type="text" name="ingr2" ng-model="ingr2">
         <input type="text" name="ingr3" ng-model="ingr3"><br><br>
-        <p>{{emptymsg}}</p>
         <button type="submit" ng-click="updateResIngr()">Submit</button>
-        <ul ng-repeat="item in idata">
-            <li><a ng-href="/viewRecipe/{{item.ID}}" >{{item.Title}}</a> </li>
+        <p>{{emptymsg}}</p>
+        <select name="ordering" id="ordering" ng-model="ordering">
+            <option value="">---Sort By---</option>
+            <option value="arate">Highest Avg Rating</option>
+            <option value="numrate">Most Rated</option>
+            <option value="numfav">Most Favorited</option>
+        </select>
+        <ul>
+            <li ng-repeat="item in idata | orderBy:ordering:true"><a ng-href="/viewRecipe/{{item.ID}}" >{{item.Title}}</a> Rating:{{item.arate}}/5 </li>
         </ul>
     </div>
     <div ng-if="searchMode=='Category'">
         <select name="catMode" ng-model="catMode" ng-init="getCat()" ng-options="item.Category for item in categories">
         </select><br><br>
         <div ng-controller="searchController">
-            <button type="submit" ng-click="updateResCat()">Submit</button>
-            <ul ng-repeat="item in cdata">
-                <li><a ng-href="/viewRecipe/{{item.ID}}" >{{item.Title}}</a> </li>
+            <button type="submit" ng-click="updateResCat()">Submit</button><br>
+            <select name="ordering" id="ordering" ng-model="ordering">
+                <option value="">---Sort By---</option>
+                <option value="arate">Highest Avg Rating</option>
+                <option value="numrate">Most Rated</option>
+                <option value="numfav">Most Favorited</option>
+            </select>
+            <ul>
+                <li ng-repeat="item in cdata | orderBy:ordering:true"><a ng-href="/viewRecipe/{{item.ID}}" >{{item.Title}}</a> Rating:{{item.arate}}/5 </li>
             </ul>
         </div>
 
