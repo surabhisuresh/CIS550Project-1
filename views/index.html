@@ -8,7 +8,7 @@
 </head>
 <body >
 
-<p>Welcome to Recipe Finder</p>
+<p>Welcome to Recipe Finder!!!!</p>
 
 
 <a href="/signIn">Sign In</a>
@@ -67,6 +67,15 @@
 
 
     </div>
+
+</div>
+
+Trending Recipes -
+
+<div ng-controller="TrendingRecipeController">
+    <ul>
+        <li ng-repeat="item in favdata"><a ng-href="/viewRecipe/{{item.ID}}" >{{item.Title}}</a> </li>
+    </ul>
 
 </div>
 

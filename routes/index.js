@@ -76,6 +76,16 @@ router.get('/get_recipes', function(req, res) {
 
 });
 
+// Get all the recipes
+router.get('/get_mostfav_recipes', function(req, res) {
+    console.log("Inside recipes");
+    connection.query('SELECT * FROM Recipes R, Favorites F WHERE R.ID = F.ID group by R.ID order by count(R.ID) LIMIT 10' ,function (err, rows, fields) {
+        if (err) throw err;
+        res.json(rows);
+    });
+
+});
+
 ////ADMIN FN (Delete recipe)
 router.get('/delRecipe/:id', function(req, res) {
     connection.query('delete from Recipes where ID= '+req.params.id ,function (err, rows, fields) {

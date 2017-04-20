@@ -5,11 +5,22 @@ app .config(function ($locationProvider){
 });
 
 app.controller('AdminController',function($scope,$http,$interval){
-    load_pictures();
+    load_recipes();
 
-    function load_pictures(){
+    function load_recipes(){
         $http.get('/get_recipes').success(function(data){
             $scope.recipes=data;
+        });
+    };
+});
+
+app.controller('TrendingRecipeController',function($scope,$http,$interval){
+    load_fav_recipes();
+
+    function load_fav_recipes(){
+        console.log("Check1");
+        $http.get('/get_mostfav_recipes').success(function(data){
+            $scope.favdata=data;
         });
     };
 });
