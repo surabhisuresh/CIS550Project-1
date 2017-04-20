@@ -52,7 +52,14 @@
 
 </div>
 
+Trending Recipe -
 
+<div ng-controller="TrendingRecipeController">
+    <ul>
+        <li ng-repeat="item in favdata"><a ng-href="/viewRecipe/{{item.ID}}" >{{item.Title}}</a> </li>
+    </ul>
+
+</div>
 
 
 </body>

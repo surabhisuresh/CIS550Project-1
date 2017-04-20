@@ -62,3 +62,8 @@ html(ng-app='angularApp')
                         li(ng-repeat='item in cdata | orderBy:ordering:true')
                             a(ng-href='/viewRecipeUser/{{item.ID}}&#{login}') {{item.Title}}
                             |  Rating:{{item.arate}}/5
+        p Trending Recipes
+            div(ng-controller='TrendingRecipeController')
+                ul
+                    li(ng-repeat='item in favdata')
+                        a(ng-href='/viewRecipeUser/{{item.ID}}&#{login}') {{item.Title}}
