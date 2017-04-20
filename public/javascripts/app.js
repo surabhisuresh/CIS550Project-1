@@ -4,12 +4,22 @@ app .config(function ($locationProvider){
     $locationProvider.html5Mode(true).hashPrefix('!');
 });
 
-app.controller('AdminController',function($scope,$http,$interval){
+app.controller('AdminRecipeController',function($scope,$http,$interval){
     load_recipes();
 
     function load_recipes(){
         $http.get('/get_recipes').success(function(data){
             $scope.recipes=data;
+        });
+    };
+});
+
+app.controller('AdminUserController',function($scope,$http,$interval){
+    load_recipes();
+
+    function load_recipes(){
+        $http.get('/get_users').success(function(data){
+            $scope.users=data;
         });
     };
 });

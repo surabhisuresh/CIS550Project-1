@@ -36,6 +36,12 @@ router.get('/admin_recipe', function(req, res, next) {
     //res.sendFile(path.join(__dirname, '../', 'views', 'admin_recipe.html'));
 });
 
+//ADMIN Page
+router.get('/admin_user', function(req, res, next) {
+    res.render('admin_user');
+    //res.sendFile(path.join(__dirname, '../', 'views', 'admin_recipe.html'));
+});
+
 //USER Page
 router.get('/user/:login', function(req, res, next) {
     res.render('user', {login: req.params.login});
@@ -76,6 +82,16 @@ router.get('/get_recipes', function(req, res) {
 
 });
 
+//ADMIN FN (See all users)
+router.get('/get_users', function(req, res) {
+    console.log("Inside users");
+    connection.query('SELECT * from Users' ,function (err, rows, fields) {
+        if (err) throw err;
+        res.json(rows);
+    });
+
+});
+
 // Get all the recipes
 router.get('/get_mostfav_recipes', function(req, res) {
     console.log("Inside recipes");
@@ -92,6 +108,15 @@ router.get('/delRecipe/:id', function(req, res) {
         if (err) throw err;
     });
     res.redirect('/admin_recipe');
+});
+
+////ADMIN FN (Delete user)
+router.get('/delAdmin/:id', function(req, res) {
+    console.log('delete from Users where = "%'+req.params.id+'%"');
+    connection.query('delete from Users where Login = "'+req.params.id+'"' ,function (err, rows, fields) {
+        if (err) throw err;
+    });
+    res.redirect('/admin_user');
 });
 
 //SEARCH BY KEYWORD

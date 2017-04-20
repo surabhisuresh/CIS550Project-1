@@ -1,3 +1,6 @@
+//
+   Created by surab on 4/20/2017.
+
 doctype html
 html(ng-app='angularApp')
     head
@@ -45,34 +48,33 @@ html(ng-app='angularApp')
                             a(href='/admin_user') User List
 
 
-            p List of All Recipes
-            div(ng-controller='AdminRecipeController')
+            p List of All Users
+            div(ng-controller='AdminUserController')
                 table(style="width:65%;")
                     thead
                         tr
-                            th ID
-
-                            th Title
-
-                            th Category
+                            th Name
 
                             th Login
 
+                            th Password
+
+                            th Email
+
                             th Delete
 
+
                     tbody
-                        tr(ng-repeat='x in recipes')
-                            td {{ x.ID }}
-
-                            td
-                                a(ng-href='/viewRecipe/{{x.ID}}') {{x.Title}}
-
-                            td {{ x.Category }}
+                        tr(ng-repeat='x in users')
+                            td {{ x.Name }}
 
                             td {{ x.Login }}
 
-                            td
-                                a(ng-href='/delRecipe/{{x.ID}}') Delete
+                            td {{ x.Password }}
 
+                            td {{ x.Email }}
+
+                            td
+                                a(ng-href='/delAdmin/{{x.Login}}') Delete
 
 
