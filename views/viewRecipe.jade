@@ -1,20 +1,38 @@
 doctype html
 html
     head
+        base(href='/')
         title Recipe Finder
+        link(href='//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css', rel='stylesheet')
+        link(href='stylesheets/custom.css', rel='stylesheet')
+        link(rel='stylesheet', href="stylesheets/colorbox.css")
     body
-        p #{results[0].Title} | #{results[0].Category}
-        - if (avgrate[0].Rate == null)
-            p AVERAGE RATING: 0/5
-        - else
-            p AVERAGE RATING: #{avgrate[0].Rate}/5
-        - for (var inx = 0; inx < results.length; inx++)
-            p #{results[inx].Qty} #{results[inx].Unit} of #{results[inx].Ingredient}
-        p #{results[0].Procedure}
-        br
-        a(href="/") Search again?
-        br
-        p Don't have an account yet? Sign up below!
-        a(href='/signUp') Sign Up
+        av.navbar.navbar-custom.navbar-fixed-top
+            .navbar-header
+                button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
+                    span.icon-bar
+                    span.icon-bar
+                    span.icon-bar
+                a.navbar-brand(onclick="location.href='/'") Recipe Finder
+            .collapse.navbar-collapse.navbar-right
+                ul.nav.navbar-nav
+                    li.active
+                        a(onclick="location.href='/signIn'") Sign In
+        div(class="recipe")
+            p(style="font-weight:bold; font-size:30px") #{results[0].Title} | #{results[0].Category}
+            - if (avgrate[0].Rate == null)
+                p(style="font-weight:bold") AVERAGE RATING: 0/5
+            - else
+                p(style="font-weight:bold") AVERAGE RATING: #{avgrate[0].Rate}/5
+            p(style="font-weight:bold") INGREDIENTS
+                - for (var inx = 0; inx < results.length; inx++)
+                    p #{results[inx].Qty} #{results[inx].Unit} of #{results[inx].Ingredient}
+            p(style="font-weight:bold") PROCEDURE
+            p #{results[0].Procedure}
+            br
+            button(type="button",class="btn btn-default",onclick="location.href='/'") Search again?
+            br
+            p Don't have an account yet? Sign up below!
+            button(type="button",class="btn btn-default",onclick="location.href='/signUp'") Sign Up
 
 

@@ -1,20 +1,37 @@
 doctype html
 html(ng-app='angularApp')
+    base(href='/')
     head
         title Recipe Finder
-
+        script(src='http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.2/angular.js')
+        script(src='javascripts/app.js', type='text/javascript')
+        link(href='//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css', rel='stylesheet')
+        link(href='stylesheets/custom.css', rel='stylesheet')
+        link(rel='stylesheet', href="stylesheets/colorbox.css")
     body
-        input(type="button", onclick="location.href='/'", value="Logout")
+        nav.navbar.navbar-custom.navbar-fixed-top
+            .navbar-header
+                button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
+                    span.icon-bar
+                    span.icon-bar
+                    span.icon-bar
+                a.navbar-brand(onclick="location.href='/user/#{login}'") Recipe Finder
+            .collapse.navbar-collapse.navbar-right
+                ul.nav.navbar-nav
+                    li.active
+                        a(onclick="location.href='/myAccount/#{login}'") MY ACCOUNT
+                    li
+                        a(onclick="location.href='/'") Logout
         p My Recipes
         ul
         - for (var inx = 0; inx < results1.length; inx++)
             li
              a(href='/viewRecipeUser/#{results1[inx].ID}&#{login}') #{results1[inx].Title} | #{results1[inx].Category}
              &nbsp;&nbsp;
-             input(type="button" ,onclick="location.href='/newRecipe/#{login}'" ,value="Edit")
-             br
-             br
-        input(type="button", onclick="location.href='/newRecipe/#{login}'", value="Add Recipe")
+             input(type="button", class="btn btn-default", onclick="location.href='/newRecipe/#{login}'" ,value="Edit")
+        br
+        br
+        input(type="button", class="btn btn-default", onclick="location.href='/newRecipe/#{login}'", value="Add Recipe")
         br
         br
         p My Favorites
@@ -24,4 +41,3 @@ html(ng-app='angularApp')
              a(href='/viewRecipeUser/#{results2[inx].ID}&#{login}') #{results2[inx].Title} | #{results2[inx].Category}
              br
              br
-        a(href="/") Search for Recipes?

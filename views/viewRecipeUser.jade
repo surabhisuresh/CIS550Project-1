@@ -1,39 +1,46 @@
 doctype html
 html
     head
+        base(href='/')
         title Recipe Finder
+        link(href='//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css', rel='stylesheet')
+        link(href='stylesheets/custom.css', rel='stylesheet')
+        link(rel='stylesheet', href="stylesheets/colorbox.css")
     body
-        input(type="button", onclick="location.href='/'", value="Logout")
-        p #{results[0].Title} | #{results[0].Category}
-        - if (avgrate[0].Rate == null)
-            p AVERAGE RATING: 0/5
-        - else
-            p AVERAGE RATING: #{avgrate[0].Rate}/5
-        - for (var inx = 0; inx < results.length; inx++)
-            p #{results[inx].Qty} #{results[inx].Unit} of #{results[inx].Ingredient}
-        p #{results[0].Procedure}
+        nav.navbar.navbar-custom.navbar-fixed-top
+            .navbar-header
+                button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
+                    span.icon-bar
+                    span.icon-bar
+                    span.icon-bar
+                a.navbar-brand(onclick="location.href='/user/#{login}'") Recipe Finder
+            .collapse.navbar-collapse.navbar-right
+                ul.nav.navbar-nav
+                    li.active
+                        a(onclick="location.href='/myAccount/#{login}'") MY ACCOUNT
+                    li
+                        a(onclick="location.href='/'") Logout
+        br
+        div(class="recipe")
+            p(style="font-weight:bold; font-size:30px") #{results[0].Title} | #{results[0].Category}
+            - if (avgrate[0].Rate == null)
+                p(style="font-weight:bold") AVERAGE RATING: 0/5
+            - else
+                p(style="font-weight:bold") AVERAGE RATING: #{avgrate[0].Rate}/5
+            p(style="font-weight:bold") INGREDIENTS
+                -for (var inx = 0; inx < results.length; inx++)
+                        p #{results[inx].Qty} #{results[inx].Unit} of #{results[inx].Ingredient}
+            p(style="font-weight:bold") PROCEDURE
+            p #{results[0].Procedure}
 
-        - if (fav.length == 0)
-            input(type="button" ,onclick="location.href='/addFav/#{results[0].ID}&#{login}'", value="Favorite?")
-        - if (fav.length != 0)
-            input(type="button" ,onclick="location.href='/delFav/#{results[0].ID}&#{login}'", value="Un-Favorite?")
-        br
-        br
-        - if (rate.length==0)
-           form(action='/addRate/#{results[0].ID}&#{login}', method='post')
-            input(type="radio", name="rating", value="1")
-            | 1
-            input(type="radio", name="rating", value="2")
-            | 2
-            input(type="radio", name="rating", value="3")
-            | 3
-            input(type="radio", name="rating", value="4")
-            | 4
-            input(type="radio", name="rating", value="5")
-            | 5
-            button(type='submit') Submit Rating
-        - else
-            form(action='/updateRate/#{results[0].ID}&#{login}', method='post')
+            - if (fav.length == 0)
+                input(type="button" , class="btn btn-default", onclick="location.href='/addFav/#{results[0].ID}&#{login}'", value="Favorite?")
+            - if (fav.length != 0)
+                input(type="button" , class="btn btn-default", onclick="location.href='/delFav/#{results[0].ID}&#{login}'", value="Un-Favorite?")
+            br
+            br
+            - if (rate.length==0)
+               form(action='/addRate/#{results[0].ID}&#{login}', method='post')
                 input(type="radio", name="rating", value="1")
                 | 1
                 input(type="radio", name="rating", value="2")
@@ -44,5 +51,17 @@ html
                 | 4
                 input(type="radio", name="rating", value="5")
                 | 5
-                button(type='submit') Change Rating from #{rate[0].Rate}
-        a(href="/user/#{login}") Go Back
+                button(type='submit',class="btn btn-default",) Submit Rating
+            - else
+                form(action='/updateRate/#{results[0].ID}&#{login}', method='post')
+                    input(type="radio", name="rating", value="1")
+                    | 1
+                    input(type="radio", name="rating", value="2")
+                    | 2
+                    input(type="radio", name="rating", value="3")
+                    | 3
+                    input(type="radio", name="rating", value="4")
+                    | 4
+                    input(type="radio", name="rating", value="5")
+                    | 5
+                    button(type='submit', class="btn btn-default",) Change Rating from #{rate[0].Rate}
