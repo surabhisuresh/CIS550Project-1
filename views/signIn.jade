@@ -22,11 +22,9 @@ html(ng-app='angularApp')
                     span.icon-bar
                 a.navbar-brand(onclick="location.href='/'") Recipe Finder
             // /.nav-collapse
-
         br
         br
         br
-
         div(class="col-xs-3 col-lg-4 col-lg-offset-4 ")
             center
                 p(style='font-size: 30px') Welcome to Recipe Finder
@@ -40,8 +38,6 @@ html(ng-app='angularApp')
                     input(class="form-control"  type='password', name="pass", ng-model='password', value = 'PASSWORD')
                     br
                     input(class="btn btn-default"  type='submit', value='SignIn', ng-click='Authenticate()')
-                br
-                br
                 p Don't have an account yet? Sign up below!
                     br
                     input(class="btn btn-default" type="button", onclick="location.href='/signUp'", value="Sign Up")

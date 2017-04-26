@@ -23,16 +23,20 @@ html
         br
         div(class="recipe")
             p(style="font-weight:bold; font-size:30px") #{results[0].Title} | #{results[0].Category}
-            - if (avgrate[0].Rate == null)
-                p(style="font-weight:bold") AVERAGE RATING: 0/5
-            - else
-                p(style="font-weight:bold") AVERAGE RATING: #{avgrate[0].Rate}/5
+            p(style="font-weight:bold") AVERAGE RATING: #{results[0].Rate}/5
             p(style="font-weight:bold") INGREDIENTS
                 -for (var inx = 0; inx < results.length; inx++)
                         p #{results[inx].Qty} #{results[inx].Unit} of #{results[inx].Ingredient}
             p(style="font-weight:bold") PROCEDURE
-            p #{results[0].Procedure}
-
+            p #{results[0].Procedures}
+            p(style="font-weight:bold") Substitutes
+            - if (subst.every(function(x){return x == null;}))
+                p Sorry! No substitutions.
+            - else
+                - for (var inx = 0; inx < subst.length; inx++)
+                    - if (subst[inx] != null)
+                        p #{subst[inx].amount} #{results[inx].Ingredient} = #{subst[inx].substitution}
+            iframe(width='800', height='250', scrolling='no', frameborder='no', src= "/showNutrition/#{results[0].ID}")
             - if (fav.length == 0)
                 input(type="button" , class="btn btn-default", onclick="location.href='/addFav/#{results[0].ID}&#{login}'", value="Favorite?")
             - if (fav.length != 0)

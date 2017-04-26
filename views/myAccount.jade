@@ -28,7 +28,7 @@ html(ng-app='angularApp')
             li
              a(href='/viewRecipeUser/#{results1[inx].ID}&#{login}') #{results1[inx].Title} | #{results1[inx].Category}
              &nbsp;&nbsp;
-             input(type="button", class="btn btn-default", onclick="location.href='/newRecipe/#{login}'" ,value="Edit")
+             input(type="button", class="btn btn-default", onclick="location.href='/editRecipe/#{results1[inx].ID}'", value="Edit")
         br
         br
         input(type="button", class="btn btn-default", onclick="location.href='/newRecipe/#{login}'", value="Add Recipe")

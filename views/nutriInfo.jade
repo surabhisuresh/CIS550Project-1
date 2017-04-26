@@ -1,0 +1,18 @@
+//
+   Created by surab on 4/26/2017.
+
+doctype html
+html
+    head
+        base(href='/')
+        title Recipe Finder
+        link(href='//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css', rel='stylesheet')
+        link(href='stylesheets/custom.css', rel='stylesheet')
+        link(rel='stylesheet', href="stylesheets/colorbox.css")
+    body
+        p(style="font-weight:bold") Nutritional Info
+        p Serving Size: 100g
+        p Energy: #{Math.round(results[0].energyAvg)} cal
+        p Fat: #{results[0].fatAvg.toPrecision(2)} g
+        p Carbohydrates: #{results[0].carbAvg.toPrecision(2)} g
+        p Protein: #{results[0].proteinAvg.toPrecision(2)} g

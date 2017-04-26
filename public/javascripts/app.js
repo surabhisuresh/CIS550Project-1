@@ -164,15 +164,16 @@ app.controller('addController', function($scope, $http) {
         });
     };
 
-    $scope.ingredients = [{qty:'q1', unit:'u1',ig: 'i1'}, {qty:'q2', unit:'u2',ig: 'i2'}];
+    $scope.ingredients = [{qty:'q1', unit:'u1',ig: 'i1', note: 'n1'}, {qty:'q2', unit:'u2',ig: 'i2', note: 'n2'}];
 
     $scope.addNewIngr = function() {
         var newItemNo = $scope.ingredients.length+1;
-        $scope.ingredients.push({'qty':'q'+newItemNo, 'unit':'u'+newItemNo, 'ig':'i'+newItemNo });
+        $scope.ingredients.push({'qty':'q'+newItemNo, 'unit':'u'+newItemNo, 'ig':'i'+newItemNo, 'note':'n'+newItemNo });
     };
 
     $scope.removeIngr = function() {
         var lastItem = $scope.ingredients.length-1;
         $scope.ingredients.splice(lastItem);
     };
+
 });

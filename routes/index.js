@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var path = require('path');
+var dym = require('didyoumean');
 
 //Connect to MySQL
 var mysql = require('mysql')
@@ -11,6 +12,50 @@ var connection = mysql.createConnection({
     database : 'RecipeData'
 });
 connection.connect();
+
+//Connect to MongoDB
+var mongoose = require('mongoose');
+mongoose.connect('group11:group11@ec2-54-152-154-124.compute-1.amazonaws.com:27017/IngredientData');
+var Schema = mongoose.Schema;
+var ObjectId = mongoose.Schema.Types.ObjectId;
+
+var substituteDataSchema = new Schema({
+    ingredient: {type: String, required: true},
+    amount: String,
+    substitution: String
+}, {collection: 'Substitutes'});
+var substituteData = mongoose.model('Substitutes', substituteDataSchema);
+
+var nutritionDataSchema = new Schema({
+    ingredient: {type: String, required: true},
+    energy_100g : String,
+    fat_100g : String,
+    carbohydrates_100g : String,
+    proteins_100g : String
+}, {collection: 'Nutrition'});
+var nutritionData = mongoose.model('Nutrition', nutritionDataSchema);
+
+//Ingredient Matcher
+function similarity(listingA,listingB) {
+        var matches = [];
+        for (var inx = 0; inx < listingA.length; inx++)
+        {
+            matches.push(dym(listingA[inx].Ingredient, listingB, 'ingredient'));
+        }
+        return matches;
+    }
+
+//Regex Ingredient Array
+function makeArray(listing) {
+    var result = [];
+    for (var inx = 0; inx < listing.length; inx++)
+    {
+        var re = new RegExp(listing[inx].Ingredient);
+        result.push(re);
+    }
+    return result;
+}
+
 
 //HOME PAGE
 router.get('/', function(req, res, next) {
@@ -36,7 +81,7 @@ router.get('/admin_recipe', function(req, res, next) {
     //res.sendFile(path.join(__dirname, '../', 'views', 'admin_recipe.html'));
 });
 
-//ADMIN Page
+//ADMIN Page For users
 router.get('/admin_user', function(req, res, next) {
     res.render('admin_user');
     //res.sendFile(path.join(__dirname, '../', 'views', 'admin_recipe.html'));
@@ -72,6 +117,7 @@ router.get('/insertUser/:values', function(req, res) {
 
 });
 
+
 //ADMIN FN (See all recipes)
 router.get('/get_recipes', function(req, res) {
     console.log("Inside recipes");
@@ -84,18 +130,8 @@ router.get('/get_recipes', function(req, res) {
 
 //ADMIN FN (See all users)
 router.get('/get_users', function(req, res) {
-    console.log("Inside users");
-    connection.query('SELECT * from Users' ,function (err, rows, fields) {
-        if (err) throw err;
-        res.json(rows);
-    });
-
-});
-
-// Get all the recipes
-router.get('/get_mostfav_recipes', function(req, res) {
     console.log("Inside recipes");
-    connection.query('SELECT * FROM Recipes R, Favorites F WHERE R.ID = F.ID group by R.ID order by count(R.ID) LIMIT 10' ,function (err, rows, fields) {
+    connection.query('SELECT * from Users WHERE IsAdmin=0' ,function (err, rows, fields) {
         if (err) throw err;
         res.json(rows);
     });
@@ -110,6 +146,16 @@ router.get('/delRecipe/:id', function(req, res) {
     res.redirect('/admin_recipe');
 });
 
+// Trending Recipes : Home Page
+router.get('/get_mostfav_recipes', function(req, res) {
+    console.log("Inside recipes");
+    connection.query('SELECT * FROM Recipes R, Favorites F WHERE R.ID = F.ID group by R.ID order by count(R.ID) LIMIT 10' ,function (err, rows, fields) {
+        if (err) throw err;
+        res.json(rows);
+    });
+
+});
+
 ////ADMIN FN (Delete user)
 router.get('/delAdmin/:id', function(req, res) {
     console.log('delete from Users where = "%'+req.params.id+'%"');
@@ -118,6 +164,7 @@ router.get('/delAdmin/:id', function(req, res) {
     });
     res.redirect('/admin_user');
 });
+
 
 //SEARCH BY KEYWORD
 router.get('/searchByKey/:key', function(req, res) {
@@ -170,14 +217,15 @@ router.get('/searchByIngr/:istr', function(req, res) {
 //VIEW RECIPE by Non-user
 router.get('/viewRecipe/:id', function(req, res) {
     //res.sendFile(path.join(__dirname, '../', 'views', 'recipe_info.html'), {test: 'hu'});
-    connection.query('SELECT * from Recipes r join HasIngr h on h.ID=r.ID  where r.ID = '+req.params.id ,function (err, rows, fields) {
+    connection.query('SELECT r.ID,r.Title,r.Category,r.Procedures,h.Ingredient, h.Qty, h.Unit, IFNULL(h.Notes,"") as Notes, IFNULL(avg(r1.Rate),0) as arate from Recipes r join HasIngr h on h.ID=r.ID left join Rates r1 on r.ID=r1.ID  where r.ID = '+req.params.id+' group by r.ID,r.Title,r.Category,r.Procedures,h.Ingredient, h.Qty, h.Unit' ,function (err, rows, fields) {
         if (err) throw err;
-        connection.query('SELECT avg(Rate) as Rate from Rates where ID = '+req.params.id ,function (err2, rows2, fields2) {
-            if (err2) throw err2;
-            //res.json(rows);
-            console.log(rows2);
-            res.render('viewRecipe', {results: rows, avgrate: rows2});
-    });
+        var ingr = JSON.parse(JSON.stringify(rows));
+        substituteData.find().then(function(doc) {
+            var matches = similarity(ingr,doc);
+            console.log(matches);
+            res.render('viewRecipe', {results: rows, subst: matches});
+            //res.render('index', {items: doc});
+        });
     });
 });
 
@@ -185,21 +233,61 @@ router.get('/viewRecipe/:id', function(req, res) {
 router.get('/viewRecipeUser/:istr', function(req, res) {
     //res.sendFile(path.join(__dirname, '../', 'views', 'recipe_info.html'), {test: 'hu'});
     var info = req.params.istr.split('&');
-    connection.query('SELECT * from Recipes r join HasIngr h on h.ID=r.ID  where r.ID = '+info[0] ,function (err, rows, fields) {
+    connection.query('SELECT r.ID,r.Title,r.Category,r.Procedures,h.Ingredient, h.Qty, h.Unit, IFNULL(h.Notes,"") as Notes, IFNULL(avg(r1.Rate),0) as arate from Recipes r join HasIngr h on h.ID=r.ID left join Rates r1 on r.ID=r1.ID  where r.ID = '+info[0]+' group by r.ID,r.Title,r.Category,r.Procedures,h.Ingredient, h.Qty, h.Unit',function (err, rows, fields) {
         if (err) throw err;
         connection.query('select ID from Favorites where Login ="'+info[1]+'" and ID = '+info[0] ,function (err2, rows2, fields2) {
             if (err2) throw err2;
             connection.query('select Rate from Rates where Login ="'+info[1]+'" and ID = '+info[0],function (err3, rows3, fields3) {
                 if (err3) throw err3;
-                connection.query('SELECT avg(Rate) as Rate from Rates where ID = '+info[0],function (err4, rows4, fields4) {
-                    if (err4) throw err4;
-                    res.render('viewRecipeUser', {results: rows, fav: rows2, rate: rows3, login: info[1], avgrate: rows4});
-    });
+                var ingr = JSON.parse(JSON.stringify(rows));
+                substituteData.find().then(function(doc) {
+                    var matches = similarity(ingr,doc);
+                    res.render('viewRecipeUser', {results: rows, fav: rows2, rate: rows3, login: info[1], subst: matches});
+                    //res.render('viewRecipe', {results: rows, subst: matches});
+                    //res.render('index', {items: doc});
+                });
+
             });
         });
     });
 
 });
+
+//NUTRITIONAL INFO
+router.get('/showNutrition/:id', function(req, res) {
+    //res.sendFile(path.join(__dirname, '../', 'views', 'recipe_info.html'), {test: 'hu'});
+    connection.query('SELECT distinct(Ingredient) from HasIngr where ID = '+req.params.id ,function (err, rows, fields) {
+        if (err) throw err;
+        var prows = JSON.parse(JSON.stringify(rows));
+        var ingr_arr = makeArray(prows);
+        nutritionData.aggregate([
+            { $match: {
+                ingredient: { $in: ingr_arr },
+                carbohydrates_100g: { $gt: 0 },
+                fat_100g: { $gt: 0 },
+                proteins_100g: { $gte: 0 },
+                energy_100g: { $lt: 500 }
+            }},
+            {
+                $group: {
+                    _id : null,
+                    energyAvg: { $avg: "$energy_100g"},
+                    fatAvg: { $avg: "$fat_100g" },
+                    carbAvg: { $avg: "$carbohydrates_100g" },
+                    proteinAvg: { $avg: "$proteins_100g" }
+                }
+            }
+        ], function (err, result) {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            res.render('nutriInfo', {results: result});
+        });
+
+    });
+});
+
 
 //MY ACCOUNT
 router.get('/myAccount/:login', function(req, res) {
@@ -216,6 +304,58 @@ router.get('/myAccount/:login', function(req, res) {
 //NEW RECIPE
 router.get('/newRecipe/:login', function(req, res) {
     res.render('newRecipe', {login: req.params.login});
+});
+//EDIT RECIPE
+router.get('/editRecipe/:id', function(req, res) {
+    connection.query('select r.ID, r.Login, r.Title, r.Category, r.Procedures, IFNULL(h.Qty, "") as Qty, IFNULL(h.Unit,"") as Unit, h.Ingredient, IFNULL(h.Notes,"") as Notes from Recipes r join HasIngr h on r.ID=h.ID where r.ID='+req.params.id ,function (err, rows, fields) {
+        if (err) throw err;
+            //console.log(rows);
+            res.render('editRecipe', {info: rows});
+
+        });
+
+});
+//UPDATE RECIPE
+router.post('/updateRecipe/:istr', function(req, res) {
+    var info = req.params.istr.split('&');
+    var len = req.body.Ingr.length;
+    var values = [];
+    var sql = "INSERT INTO HasIngr VALUES ?";
+    connection.query('update Recipes set Title="'+req.body.title+'", Category="'+req.body.cat+'", Procedures="'+req.body.procedure+'" where ID='+info[0] ,function (err1, rows1, fields1) {
+        if (err1) throw err1;
+        connection.query('delete from HasIngr where ID='+info[0] ,function (err2, rows2, fields2) {
+            if (err2) throw err2;
+            for (var inx=0; inx<len; inx++){
+                values.push([parseInt(info[0]), req.body.Qty[inx], req.body.Unit[inx], req.body.Ingr[inx], req.body.Note[inx]]);
+            }
+            //console.log(values);
+            connection.query(sql, [values], function(err3) {
+                if (err3) throw err3;
+                res.redirect('/myAccount/' + info[1]);
+            });
+        });
+    });
+});
+//ADD RECIPE
+router.post('/addRecipe/:login', function(req, res) {
+    var len = req.body.Ingr.length;
+    var values = [];
+    var sql = "INSERT INTO HasIngr VALUES ?";
+    connection.query('insert into Recipes(Title,Category,Procedures,Login) values ("'+req.body.title+'","'+req.body.cat+'","'+req.body.procedure+'","'+req.params.login+'")' ,function (err1, rows1, fields1) {
+        if (err1) throw err1;
+        connection.query('select ID from Recipes where Title = "'+req.body.title+'" and Login ="'+req.params.login+'"' ,function (err2, rows2, fields2) {
+            if (err2) throw err2;
+            var id = JSON.parse(JSON.stringify(rows2));
+            for (var inx=0; inx<len; inx++){
+                values.push([parseInt(id[0].ID), req.body.Qty[inx], req.body.Unit[inx], req.body.Ingr[inx], req.body.Note[inx]]);
+            }
+            //console.log(values);
+            connection.query(sql, [values], function(err3) {
+                if (err3) throw err3;
+                res.redirect('/myAccount/' + req.params.login);
+            });
+        });
+    });
 });
 
 //ADD FAVORITE
